@@ -13,7 +13,7 @@ services:
     image: wallet_wise:latest
     container_name: wallet-wise
     env_file:
-      - .env
+      - .env_docker
     entrypoint: "make ./serve"
     # restart: always
     ports:
