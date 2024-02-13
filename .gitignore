@@ -1,0 +1,15 @@
+settings_local.py
+/build/
+/cache/
+/dist/
+/*.egg-info/
+/*.dist-info/
+__pycache__/
+/localstore.db
+/test_localstore.db
+/media/
+.ipynb_checkpoints
+.idea/
+.streamlit/secrets.toml
+env
+venv

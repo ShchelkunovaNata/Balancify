@@ -1,0 +1,44 @@
+"""Локальные Django настройки.
+
+Скопируйте этот файл, убрав суффикс .example, и отредактируйте параметры ниже.
+"""
+from .settings import *
+
+# Отключите отладку при развёртывании на сервере.
+DEBUG = True
+
+# Поместите в начало списка актуальный домен сайта.
+ALLOWED_HOSTS = ['']
+
+# Запишите сюда случайную строчку длиной не менее 50 символов, уникальную для
+# каждой установки.
+SECRET_KEY = 'django-insecure-r(n2)me+t9oo&1uq_d9p2+hdwlerqj*eeaf$d5932=&dale2h1212'
+
+# Каталог, куда Django копирует статические файлы в процессе установки или
+# обновления. Должен быть доступен на веб-сервере по адресу STATIC_URL.
+#STATIC_ROOT = '/usr/local/share/wallet/static'
+
+# Каталог, куда Django загружает пользовательские файлы в процессе обычной
+# работы сайта. Должен быть доступен на веб-сервере по адресу MEDIA_URL.
+
+#MEDIA_ROOT = '/var/local/lib/wallet/media'
+
+
+
+# Список доступных методов авторизации
+REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = (
+    'rest_framework.authentication.BasicAuthentication',
+    'rest_framework.authentication.SessionAuthentication',
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
+)
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "lightech",
+        "USER": "",
+        "PASSWORD": "", # set your password in settings_local.py
+        "HOST": "localhost",
+        "PORT": "5432",
+    },
+}
