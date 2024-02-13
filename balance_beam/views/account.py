@@ -20,7 +20,7 @@ class UserViewSet(
     queryset = CustomCustomer.objects.all()
     serializer_class = UserSerializer
 
-    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+    def create(self, request: Request, *args: any, **kwargs: any) -> Response:
         """
         Create a new instance of the resource.
         Args:
@@ -51,7 +51,7 @@ class UserViewSet(
 
         return serializer_class
 
-    def update(self, request: Request, *args: Any, **kwargs: Any) -> Any:
+    def update(self, request: Request, *args: any, **kwargs: any) -> any:
         """
         Update function with permission check.
 
