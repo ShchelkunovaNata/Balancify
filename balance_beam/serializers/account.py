@@ -70,10 +70,6 @@ class UserSerializer(serializers.ModelSerializer):
         return {"success": True}
 
 
-class UserExistsSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-
-
 class UserSerializerForUpdate(serializers.ModelSerializer):
     old_password = serializers.CharField(write_only=True)
 

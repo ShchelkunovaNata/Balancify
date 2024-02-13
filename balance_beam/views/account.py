@@ -1,17 +1,12 @@
 from rest_framework import mixins, status, viewsets
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import JsonResponse
-from rest_framework.permissions import IsAuthenticated
 from ..serializers import (
     UserSerializer,
-    UserExistsSerializer,
     UserSerializerForUpdate
 )
-from rest_framework.decorators import action
 from ..models import CustomCustomer
-from rest_framework.permissions import IsAuthenticated, AllowAny
-
 
 
 class UserViewSet(
@@ -25,13 +20,30 @@ class UserViewSet(
     queryset = CustomCustomer.objects.all()
     serializer_class = UserSerializer
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        """
+        Create a new instance of the resource.
+        Args:
+        - request (Request): The request object containing the data for the new instance.
+        - *args (Any): Additional positional arguments.
+        - **kwargs (Any): Additional keyword arguments.
+
+        Returns:
+        - Response: The response containing the new instance and a status code.
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.instance, status=status.HTTP_201_CREATED)
 
-    def get_serializer_class(self):
+    def get_serializer_class(self) -> UserSerializer | UserSerializerForUpdate:
+        """
+        Return the appropriate serializer class based on the request method.
+        Args:
+            self: The instance of the class.
+        Returns:
+            Type[Serializer]: The appropriate serializer class for the request method.
+        """
         serializer_class = self.serializer_class
 
         if self.request.method in ("PUT", "PATCH"):
@@ -39,37 +51,34 @@ class UserViewSet(
 
         return serializer_class
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request: Request, *args: Any, **kwargs: Any) -> Any:
+        """
+        Update function with permission check.
+
+        Args:
+        - request: The request object.
+        - args: Additional positional arguments.
+        - kwargs: Additional keyword arguments.
+
+        Returns:
+        - The updated object.
+        """
         if int(kwargs["pk"]) != request.user.id:
             raise PermissionError(
-                """Недостаточно прав для выполнения данного действия."""
+                """Insufficient permissions to perform this action."""
             )
 
         return super().update(request, *args, **kwargs)
 
-    @action(detail=False, permission_classes=[IsAuthenticated])
-    def current(self, request):
-        """Текущий пользователь.
+    def current(self, request: Request) -> Response:
+        """Get current user data.
+        Retrieve data about the authenticated user.
 
-        Получить данные о аутентифицированном пользователе.
+        Args:
+            request (Request): The request object.
+        Returns:
+            Response: The response object containing user data.
         """
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
 
-    @action(
-        detail=False,
-        methods=["POST"],
-        permission_classes=[AllowAny],
-    )
-    def exists(self, request):
-        serialize = UserExistsSerializer(data=request.data)
-        serialize.is_valid(raise_exception=True)
-        result = {"exists": False, "email_verification_status": False}
-        try:
-            user = CustomCustomer.objects.get(email=serialize.validated_data["email"])
-        except CustomCustomer.DoesNotExist:
-            return Response(result)
-
-        result["exists"] = True
-        result["email_verification_status"] = user.email_verification_status
-        return Response(result)
