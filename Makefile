@@ -2,9 +2,11 @@
 # поэтому пока это можно использовать чтоб скопировать и вставить =)
 
 # Run the server
+serve_docker:
+	python3  manage.py runserver --settings wallet_wise.settings_local --verbosity 1
+
 serve:
 	python3  manage.py runserver --settings wallet_wise.settings_local
-
 # Make migrations and migrate
 migrate:
 	python3 manage.py migrate --fake --settings wallet_wise.settings_local

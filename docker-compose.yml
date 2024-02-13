@@ -1,0 +1,41 @@
+# WARNING: так и не смогла дописать и понять, почему не подключается ((((( но я честно старалась
+
+version: '3.1'
+networks:
+  docker_network:
+    external: false
+
+services:
+  wallet_wise:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: wallet_wise:latest
+    container_name: wallet-wise
+    env_file:
+      - .env
+    entrypoint: "make ./serve"
+    # restart: always
+    ports:
+      - 8000:8000
+    depends_on:
+      - db # condition: service_healthy
+
+  db:
+    image: postgres:14.0-alpine
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+    container_name: db
+    ports:
+      - 5432:5432
+
+volumes:
+  db_data:
+    # static_value:
+    # media_value:

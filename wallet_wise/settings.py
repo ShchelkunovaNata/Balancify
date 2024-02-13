@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+
 from datetime import timedelta
 from pathlib import Path
 import os
@@ -27,7 +28,7 @@ SECRET_KEY = "django-insecure-c4so)a+mtx+k&$9z(*5)6im=#g3h!-t#4m2=5sbgad3!ckfgq1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
