@@ -6,7 +6,7 @@ class BalanceService:
     @staticmethod
     def _perform_balance_operation(
         user: CustomCustomer,
-        amount_in_rubles: float,
+        amount_in_kopecks: int,
         operation_type: str,
         related_customer: CustomCustomer | None = None,
         text_error: str | None = None,
@@ -16,7 +16,7 @@ class BalanceService:
         Perform a balance operation for a user and create a corresponding BalanceOperation record.
         Args:
         user (CustomCustomer): The user for whom the balance operation is being performed.
-        amount_in_rubles (float): The amount of rubles involved in the operation.
+        amount_in_kopecks (int): The amount of kopecks involved in the operation.
         operation_type (str): The type of the operation.
         related_customer (CustomCustomer, optional): The related customer for the operation.
         text_error (str, optional): The error message, if any.
@@ -27,7 +27,7 @@ class BalanceService:
         with transaction.atomic():
             user = CustomCustomer.objects.select_for_update().get(pk=user.pk)
             if not text_error:
-                user.balance += amount_in_rubles
+                user.balance += amount_in_kopecks
                 user.save()
             operation = BalanceOperation.objects.create(
                 user=user,
@@ -54,9 +54,9 @@ class BalanceService:
         Returns:
             BalanceOperation: The balance operation object representing the increase.
         """
-        amount_in_rubles = amount_in_kopecks
+    
         return cls._perform_balance_operation(
-            user, amount_in_rubles, "INCREASE", related_customer=sender
+            user, amount_in_kopecks, "INCREASE", related_customer=sender
         )
 
     @classmethod
@@ -75,9 +75,9 @@ class BalanceService:
         Returns:
         - BalanceOperation: The balance operation object representing the transfer.
         """
-        amount_in_rubles = amount_in_kopecks
+    
         return cls._perform_balance_operation(
-            user, -amount_in_rubles, "TRANSFER", related_customer=recipient
+            user, -amount_in_kopecks, "TRANSFER", related_customer=recipient
         )
 
     @staticmethod
